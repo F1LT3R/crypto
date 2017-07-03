@@ -1,0 +1,13 @@
+{
+  "name": "crypto",
+  "private": true,
+  "version": "1.0.0",
+  "repo": "git@github.com/f1lt3r/crypto.git",
+  "main": "index.js",
+  "author": "f1lt3r",
+  "license": "MIT",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "tty-table": "^2.5.3"
+  }
+}
