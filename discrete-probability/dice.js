@@ -28,6 +28,7 @@ class Set {
 		this.rolls = new Six()
 		this.p = new Six()
 		this.maxProbability = 0
+		this.minProbability = 1
 	}
 
 	roll() {
@@ -41,23 +42,29 @@ class Set {
 		console.log(`Roll Count: ${this.timesToRoll}`)
 
 		this.rollTable = new Table({
-			head: ['Side', 'Rolls', 'P (probability)']
+			head: ['Side', 'P (Probable)', 'Roll Count', 'P (Actual)']
 		})
 
 		Reflect.ownKeys(this.rolls).forEach(side => {
 			const sideCount = this.rolls[side]
-			const p = 1 / this.timesToRoll * sideCount
+			const p = (1 / this.timesToRoll * sideCount).toFixed(2)
+			const r = this.timesToRoll / sides
 
 			this.p[side] = p
 
 			if (p > this.maxProbability) {
-				this.maxProbability = p
+				this.maxProbability = Number(p)
+			}
+
+			if (p < this.minProbability) {
+				this.minProbability = Number(p)
 			}
 
 			this.rollTable.push([
 				side,
+				`${r}/${this.timesToRoll}`,
 				sideCount,
-				p.toFixed(2) + '/' + sides
+				p
 			])
 		})
 
@@ -68,7 +75,7 @@ class Set {
 }
 
 const maxPTable = new Table({
-	head: ['Roll Count', 'Max P']
+	head: ['Roll Count', 'Min P', 'Max P', 'P Range (error)']
 })
 
 const sets = [
@@ -78,13 +85,18 @@ const sets = [
 	new Set(Math.pow(6, 8))
 ]
 
+
 sets.forEach(set => {
 	set.roll()
 	set.calculate()
+
 	maxPTable.push([
 		set.timesToRoll,
-		set.maxProbability.toFixed(4) + '/' + sides
+		set.minProbability.toFixed(2),
+		set.maxProbability.toFixed(2),
+		(set.maxProbability - set.minProbability).toFixed(2)
 	])
 })
 
+console.log('Rolling a dice 6 times gives you a 1/6 probability that 1 will be rolled. But the margin of error between probability and actual result is greater with a smaller sample size.')
 console.log(maxPTable.toString())
