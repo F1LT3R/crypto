@@ -38,4 +38,5 @@ const cypher = text => {
 
 const encrypted = cypher(text)
 
+console.log(text)
 console.log(encrypted)
